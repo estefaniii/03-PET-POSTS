@@ -1,47 +1,53 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+    OneToMany,
+} from 'typeorm';
+import { PetPost } from './petpost.model';
 
 export enum UserRole {
-  USER = 'user',
-  ADMIN = 'admin',
+    ADMIN = 'admin',
+    USER = 'user',
 }
 
 @Entity()
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+    @PrimaryGeneratedColumn('uuid')
+    id!: string;
 
-  @Column('varchar', {
-    length: 150,
-  })
-  name: string;
+    @Column('varchar', {
+        length: 100,
+        nullable: false,
+    })
+    name!: string;
 
-  @Column('varchar', {
-    length: 255,
-    unique: true,
-    nullable: true,
-  })
-  email: string;
+    @Column('varchar', {
+        unique: true,
+        nullable: false,
+    })
+    email!: string;
 
-  @Column('varchar', {
-    length: 255,
-    nullable: false,
-  })
-  password: string;
+    @Column('varchar', {
+        nullable: false,
+    })
+    password!: string;
 
-  @Column('enum', {
-    enum: UserRole,
-    default: UserRole.USER,
-  })
-  role: UserRole;
+    @Column('enum', {
+        enum: UserRole,
+        default: UserRole.USER,
+        nullable: false,
+    })
+    role!: UserRole;
 
-  @Column('boolean', {
-    default: false,
-  })
-  status: boolean;
+    @Column({ type: 'boolean', default: false, nullable: false })
+    status: boolean;
 
-  @Column('timestamp', {
-    default: () => 'CURRENT_TIMESTAMP',
-    nullable: false,
-  })
-  created_at: Date;
+    @CreateDateColumn()
+    created_at!: Date;
+
+    @OneToMany(() => PetPost, (petPost) => petPost.user)
+    pet: PetPost[];
 }

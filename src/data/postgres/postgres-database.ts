@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm';
-import { User } from './models/user.model';
-import { PetPost } from './models/pet-post.model'
-
+import { User } from './models/user.model'; // Asegúrate de tener la ruta correcta
+import { PetPost } from './models/petpost.model'; // Ya lo tienes importado
 
 interface Options {
   host: string;
@@ -10,37 +9,42 @@ interface Options {
   password: string;
   database: string;
 }
-
 /**
- * Clase para gestionar la conexión a una base de datos de PostgreSQL utilizando TypeORM.
+ * Clase para gestionar la conexión a la base de datos PostgresSQL utilizando TypeORM.
  *
- * Esta clase configura y administra la conexión a una base de datos incluyendo la inicialización de las entidades: User, Pet, Doctor, Specie y Appointment.
+ * @remarks
+ * Esta clase configura y establece la conexión a una base de datos PostgresSQL utilizando TypeORM.
  *
- * La conexión se configura para sincronizar el esquema de la base de datos y utiliza un SSL con `rejectUnauthorized: false` para evitar errores en entorno de desarrollo.
+ * La conexion se configura para sincroizar la base de datos y utilizar SSL con rechazo de certificado no autorizado, en desarrollo.
  *
  * @example
  * ```typescript
- * const database = new PostgresDatabase({
+ * const postgres = new PostgresDatabase({
  *   host: "localhost",
  *   port: 5432,
- *   username: "postgres",
+ *   username: "user",
  *   password: "password",
- *   database: "veterinary",
- * })
+ *   database: "database",
+ * });
  *
- * database.connect().then(() => {}).catch((error) => console.error(error));
+ * await postgres.connect();
  * ```
  */
 export class PostgresDatabase {
-  public dataSource: DataSource;
+  public datasource: DataSource;
 
   /**
-   * Crea una nueva instancia de la conexión a PostgreSQL.
+   * Crea una instancia de la clase PostgresDatabase.
    *
    * @param options - Opciones de configuración para la conexión a la base de datos.
+   * @param options.host - Host de la base de datos.
+   * @param options.port - Puerto de la base de datos.
+   * @param options.username - Nombre de usuario para la conexión a la base de datos.
+   * @param options.password - Contraseña para la conexión a la base de datos.
+   * @param options.database - Nombre de la base de datos.
    */
   constructor(options: Options) {
-    this.dataSource = new DataSource({
+    this.datasource = new DataSource({
       type: 'postgres',
       host: options.host,
       port: options.port,
@@ -48,7 +52,7 @@ export class PostgresDatabase {
       password: options.password,
       database: options.database,
       synchronize: true,
-      entities: [User, PetPost],
+      entities: [PetPost, User],
       ssl: {
         rejectUnauthorized: false,
       },
@@ -56,30 +60,17 @@ export class PostgresDatabase {
   }
 
   /**
-   * Establece la conexión con la base de datos
-   * @returns Promise que se resuelve cuando la conexión es exitosa
+   * Establece la conexión a la base de datos.
+   *
+   * @returns {Promise<void>} - Una promesa que se resuelve cuando la conexión se ha establecido correctamente.
+   * @throws {Error} - Si ocurre un error al intentar conectar a la base de datos.
    */
-  async connect(): Promise<void> {
+  async connect() {
     try {
-      await this.dataSource.initialize();
-      console.log('Database connection established');
+      await this.datasource.initialize();
+      console.log('Postgres database connected!');
     } catch (error) {
-      console.error('Error connecting to database:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Cierra la conexión con la base de datos
-   * @returns Promise que se resuelve cuando la conexión es cerrada
-   */
-  async disconnect(): Promise<void> {
-    try {
-      await this.dataSource.destroy();
-      console.log('Database connection closed');
-    } catch (error) {
-      console.error('Error disconnecting from database:', error);
-      throw error;
+      console.error(error);
     }
   }
 }

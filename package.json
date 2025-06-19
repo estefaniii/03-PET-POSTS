@@ -1,27 +1,45 @@
 {
-  "name": "03-pet-posts",
+  "name": "tarea",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "tsnd --respawn src/app.ts"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsnd --respawn src/app.ts",
+    "start:dev": "tsnd --respawn src/app.ts",
+    "build": "rimraf ./dist && tsc",
+    "start": "npm run build && node dist/app.js"
   },
   "keywords": [],
-  "author": "Estéfani",
+  "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "description": "",
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.8",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^4.17.21",
+    "@types/hpp": "^0.2.6",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.15.17",
-    "nodemon": "^2.0.22",
-    "ts-node-dev": "^2.0.0"
+    "@types/nodemailer": "^6.4.17",
+    "rimraf": "^6.0.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@types/express": "^5.0.2",
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "env-var": "^7.5.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.1.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^7.0.3",
     "pg": "^8.16.0",
     "reflect-metadata": "^0.2.2",
-    "typeorm": "^0.3.24"
+    "typeorm": "^0.3.23",
+    "zod": "^3.24.4"
   }
 }
